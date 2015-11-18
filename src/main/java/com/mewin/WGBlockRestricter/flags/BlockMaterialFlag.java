@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.mewin.WGBlockRestricter.flags;
 
 import com.mewin.WGBlockRestricter.Utils;
@@ -25,74 +24,50 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 /**
- *
  * @author mewin<mewin001@hotmail.de>
  */
-public class BlockMaterialFlag extends CustomFlag<Material>
-{
-    public BlockMaterialFlag(String name)
-    {
-        super(name);
-    }
+public class BlockMaterialFlag extends CustomFlag<Material>{
 
-    @Override
-    public Material parseInput(WorldGuardPlugin wgp, CommandSender cs, String input) throws InvalidFlagFormat
-    {
-        if (Utils.aliases.containsKey(input.trim().toLowerCase().replace(" ", "_")))
-        {
-            return Utils.aliases.get(input);
-        }
-        
-        Material mat;
-        try
-        {
-            int i = Integer.valueOf(input);
-            mat = Material.getMaterial(i);
-            
-            if (mat == null)
-            {
-                throw new InvalidFlagFormat(input + " is not a valid material id.");
-            }
-        }
-        catch(NumberFormatException ex)
-        {
-            mat = Material.getMaterial(input.toUpperCase());
-            if (mat == null)
-            {
-                throw new InvalidFlagFormat(input + " is not a valid material name.");
-            }
-        }
-        if (!mat.isBlock())
-        {
-            throw new InvalidFlagFormat (mat.name() + " is not a block.");
-        }
-        else
-        {
-            return mat;
-        }
-    }
+	public BlockMaterialFlag(String name){
+		super(name);
+	}
 
-    @Override
-    public Material unmarshal(Object o)
-    {
-        return loadFromDb((String) o);
-    }
+	@Override
+	public Material parseInput(WorldGuardPlugin wgp, CommandSender cs, String input) throws InvalidFlagFormat{
+		if(Utils.aliases.containsKey(input.trim().toLowerCase().replace(" ", "_"))){ return Utils.aliases.get(input); }
+		Material mat;
+		try{
+			int i = Integer.valueOf(input);
+			mat = Material.getMaterial(i);
+			if(mat == null){ throw new InvalidFlagFormat(input + " is not a valid material id."); }
+		}catch(NumberFormatException ex){
+			mat = Material.getMaterial(input.toUpperCase());
+			if(mat == null){ throw new InvalidFlagFormat(input + " is not a valid material name."); }
+		}
+		if(!mat.isBlock()){
+			throw new InvalidFlagFormat(mat.name() + " is not a block.");
+		}else{
+			return mat;
+		}
+	}
 
-    @Override
-    public Object marshal(Material t)
-    {
-        return saveToDb(t);
-    }
+	@Override
+	public Material unmarshal(Object o){
+		return loadFromDb((String) o);
+	}
 
-    @Override
-    public Material loadFromDb(String str)
-    {
-        return Material.getMaterial(str);
-    }
+	@Override
+	public Object marshal(Material t){
+		return saveToDb(t);
+	}
 
-    @Override
-    public String saveToDb(Material o)
-    {
-        return o.name();
-    }
+	@Override
+	public Material loadFromDb(String str){
+		return Material.getMaterial(str);
+	}
+
+	@Override
+	public String saveToDb(Material o){
+		return o.name();
+	}
 }

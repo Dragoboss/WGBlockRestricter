@@ -16,151 +16,108 @@
  */
 package com.mewin.WGBlockRestricter;
 
+import java.io.*;
+import java.util.logging.Level;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import com.mewin.WGBlockRestricter.flags.BlockMaterialFlag;
 import com.mewin.WGCustomFlags.WGCustomFlagsPlugin;
 import com.mewin.WGCustomFlags.flags.CustomSetFlag;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- *
  * @author mewin <mewin001@hotmail.de>
  */
-public class WGBlockRestricterPlugin extends JavaPlugin {
-    public static final BlockMaterialFlag BLOCK_TYPE_FLAG = new BlockMaterialFlag("block-type");
-    public static final CustomSetFlag ALLOW_BLOCK_FLAG = new CustomSetFlag("allow-blocks", BLOCK_TYPE_FLAG);
-    public static final CustomSetFlag DENY_BLOCK_FLAG = new CustomSetFlag("deny-blocks", BLOCK_TYPE_FLAG);
-    public static final CustomSetFlag ALLOW_PLACE_FLAG = new CustomSetFlag("allow-place", BLOCK_TYPE_FLAG);
-    public static final CustomSetFlag DENY_PLACE_FLAG = new CustomSetFlag("deny-place", BLOCK_TYPE_FLAG);
-    public static final CustomSetFlag ALLOW_BREAK_FLAG = new CustomSetFlag("allow-break", BLOCK_TYPE_FLAG);
-    public static final CustomSetFlag DENY_BREAK_FLAG = new CustomSetFlag("deny-break", BLOCK_TYPE_FLAG);
-    
-    private BlockListener listener;
-    private WorldGuardPlugin wgPlugin;
-    private WGCustomFlagsPlugin custPlugin;
-    
-    @Override
-    public void onEnable() {
-        wgPlugin = getWorldGuard();
-        custPlugin = getWGCustomFlags();
-        
-        if (wgPlugin == null) {
-            getLogger().warning("This plugin requires WorldGuard, disabling.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        
-        if (custPlugin == null) {
-            getLogger().warning("This plugin requires WorldGuard Custom Flags, disabling.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        
-        listener = new BlockListener(this, wgPlugin);
-        
-        getServer().getPluginManager().registerEvents(listener, this);
-        
-        loadConfig();
-        
-        Utils.init();
-    }
-    
-    private WorldGuardPlugin getWorldGuard() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
-        
-        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-            return null;
-        }
-        
-        return (WorldGuardPlugin) plugin;
-    }
-    
-    private WGCustomFlagsPlugin getWGCustomFlags() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("WGCustomFlags");
-        
-        if (plugin == null || !(plugin instanceof WGCustomFlagsPlugin)) {
-            return null;
-        }
-        
-        return (WGCustomFlagsPlugin) plugin;
-    }
-    
-    private void loadConfig()
-    {
-        File configFile = new File(this.getDataFolder(), "config.yml");
-        if (!this.getDataFolder().exists())
-        {
-            this.getDataFolder().mkdirs();
-        }
-        
-        if (!configFile.exists())
-        {
-            createDefaultConfig(configFile);
-        }
-        
-        try
-        {
-            this.getConfig().load(configFile);
-        }
-        catch(FileNotFoundException x)
-        {
-            getLogger().log(Level.WARNING, "Creating default configuration failed!");
-        }
-        catch(IOException ex)
-        {
-            getLogger().log(Level.WARNING, "Could not load configuration file: ", ex);
-        }
-        catch(Exception ex)
-        {
-            getLogger().log(Level.WARNING, "Invalid configuration: ", ex);
-        }
-    }
-    
-    private void createDefaultConfig(File configFile)
-    {
-        FileOutputStream out = null;
-        InputStream in = null;
-        try
-        {
-            configFile.createNewFile();
-            out = new FileOutputStream(configFile);
-            in = WGBlockRestricterPlugin.class.getResourceAsStream("/config.yml");
-            int r;
-            while ((r = in.read()) > -1)
-            {
-                out.write(r);
-            }
-        }
-        catch(IOException ex)
-        {
-            getLogger().log(Level.WARNING, "Could not create configuration file: ", ex);
-        }
-        finally
-        {
-            if (out != null)
-            {
-                try
-                {
-                    out.close();
-                }
-                catch(Exception ex) {}
-            }
-            
-            if (in != null)
-            {
-                try
-                {
-                    in.close();
-                }
-                catch(Exception ex) {}
-            }
-        }
-    }
+public class WGBlockRestricterPlugin extends JavaPlugin{
+
+	public static final BlockMaterialFlag BLOCK_TYPE_FLAG = new BlockMaterialFlag("block-type");
+	public static final CustomSetFlag ALLOWED_BLOCK_FLAG = new CustomSetFlag("allowed-blocks", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag BLOCKED_BLOCK_FLAG = new CustomSetFlag("blocked-blocks", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag ALLOWED_PLACE_FLAG = new CustomSetFlag("allowed-place", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag BLOCKED_PLACE_FLAG = new CustomSetFlag("blocked-place", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag ALLOWED_BREAK_FLAG = new CustomSetFlag("allowed-break", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag BLOCKED_BREAK_FLAG = new CustomSetFlag("blocked-break", BLOCK_TYPE_FLAG);
+	private BlockListener listener;
+	private WorldGuardPlugin wgPlugin;
+	private WGCustomFlagsPlugin custPlugin;
+
+	@Override
+	public void onEnable(){
+		wgPlugin = getWorldGuard();
+		custPlugin = getWGCustomFlags();
+		if(wgPlugin == null){
+			getLogger().warning("This plugin requires WorldGuard, disabling.");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+		if(custPlugin == null){
+			getLogger().warning("This plugin requires WorldGuard Custom Flags, disabling.");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+		listener = new BlockListener(this, wgPlugin);
+		getServer().getPluginManager().registerEvents(listener, this);
+		loadConfig();
+		Utils.init();
+	}
+
+	private WorldGuardPlugin getWorldGuard(){
+		Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+		if(plugin == null || !(plugin instanceof WorldGuardPlugin)){ return null; }
+		return (WorldGuardPlugin) plugin;
+	}
+
+	private WGCustomFlagsPlugin getWGCustomFlags(){
+		Plugin plugin = getServer().getPluginManager().getPlugin("WGCustomFlags");
+		if(plugin == null || !(plugin instanceof WGCustomFlagsPlugin)){ return null; }
+		return (WGCustomFlagsPlugin) plugin;
+	}
+
+	private void loadConfig(){
+		File configFile = new File(this.getDataFolder(), "config.yml");
+		if(!this.getDataFolder().exists()){
+			this.getDataFolder().mkdirs();
+		}
+		if(!configFile.exists()){
+			createDefaultConfig(configFile);
+		}
+		try{
+			this.getConfig().load(configFile);
+		}catch(FileNotFoundException x){
+			getLogger().log(Level.WARNING, "Creating default configuration failed!");
+		}catch(IOException ex){
+			getLogger().log(Level.WARNING, "Could not load configuration file: ", ex);
+		}catch(Exception ex){
+			getLogger().log(Level.WARNING, "Invalid configuration: ", ex);
+		}
+	}
+
+	private void createDefaultConfig(File configFile){
+		FileOutputStream out = null;
+		InputStream in = null;
+		try{
+			configFile.createNewFile();
+			out = new FileOutputStream(configFile);
+			in = WGBlockRestricterPlugin.class.getResourceAsStream("/config.yml");
+			int r;
+			while((r = in.read()) > -1){
+				out.write(r);
+			}
+		}catch(IOException ex){
+			getLogger().log(Level.WARNING, "Could not create configuration file: ", ex);
+		}finally{
+			if(out != null){
+				try{
+					out.close();
+				}catch(Exception ex){}
+			}
+			if(in != null){
+				try{
+					in.close();
+				}catch(Exception ex){}
+			}
+		}
+	}
 }

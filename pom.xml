@@ -4,17 +4,25 @@
 
   <groupId>com.mewin</groupId>
   <artifactId>WGBlockRestricter</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
   <packaging>jar</packaging>
 
   <name>WGBlockRestricter</name>
   <url>http://maven.apache.org</url>
     <build>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>clean package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -26,7 +34,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+
   <repositories>
       <repository>
           <id>bukkit-repo</id>
@@ -41,22 +49,19 @@
           <url>http://maven.mewin.de</url>
       </repository>
   </repositories>
-  
+
     <dependencies>
         <!-- Bukkit Dependency -->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.9-R0.2</version>
-            <type>jar</type>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
         </dependency>
         <!-- WorldGuard Dependency -->
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>worldguard</artifactId>
-            <version>5.8-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>6.1.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>truezip</artifactId>
@@ -96,23 +101,8 @@
         <dependency>
             <groupId>com.mewin</groupId>
             <artifactId>WGCustomFlags</artifactId>
-            <version>1.7.1</version>
-            <type>jar</type>
+            <version>1.8.8</version>
         </dependency>
         <!-- WGTreeFarmFlag dependency -->
-        <dependency>
-            <groupId>de.bangl</groupId>
-            <artifactId>WGTreeFarmFlag</artifactId>
-            <version>1.6</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
-    <distributionManagement>
-        <repository>
-            <id>local.repo</id>
-            <name>Mewin Repository</name>
-            <url>file:///var/www/maven</url>
-        </repository>
-    </distributionManagement>
 </project>

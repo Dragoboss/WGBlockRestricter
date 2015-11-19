@@ -45,7 +45,7 @@ public final class Utils{
 		if(blockedBlocks != null && (blockedBlocks.contains(blockType) || blockedBlocks.contains(Material.AIR))){
 			good = false;
 		}
-		if(allowedBlocks != null && (blockedBlocks.contains(blockType) || blockedBlocks.contains(Material.AIR))){
+		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
 			good = true;
 		}
 		return good;
@@ -192,6 +192,7 @@ public final class Utils{
 		aliases.put("painting", Material.PAINTING);
 		aliases.put("item_frame", Material.ITEM_FRAME);
 		aliases.put("any", Material.AIR);
+		aliases.put("all", Material.AIR);
 		aliases.put("sign", Material.SIGN);
 		aliases.put("diode", Material.DIODE);
 		File itemCsv = new File("item.csv");

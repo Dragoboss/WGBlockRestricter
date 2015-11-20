@@ -16,12 +16,13 @@
  */
 package com.mewin.WGBlockRestricter.flags;
 
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+
 import com.mewin.WGBlockRestricter.Utils;
 import com.mewin.WGCustomFlags.flags.CustomFlag;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 
 /**
  * @author mewin<mewin001@hotmail.de>
@@ -41,7 +42,7 @@ public class BlockMaterialFlag extends CustomFlag<Material>{
 			mat = Material.getMaterial(i);
 			if(mat == null){ throw new InvalidFlagFormat(input + " is not a valid material id."); }
 		}catch(NumberFormatException ex){
-			mat = Material.getMaterial(input.toUpperCase());
+			mat = Material.getMaterial(input.toUpperCase().replace(" ", "_"));
 			if(mat == null){ throw new InvalidFlagFormat(input + " is not a valid material name."); }
 		}
 		if(!mat.isBlock()){

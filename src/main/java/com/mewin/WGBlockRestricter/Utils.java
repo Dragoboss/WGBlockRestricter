@@ -195,6 +195,7 @@ public final class Utils{
 		aliases.put("all", Material.AIR);
 		aliases.put("sign", Material.SIGN);
 		aliases.put("diode", Material.DIODE);
+		aliases.put("seed", Material.CROPS);
 		File itemCsv = new File("item.csv");
 		if(itemCsv.exists() && itemCsv.isFile()){
 			Bukkit.getLogger().log(Level.INFO, "item.csv found. Attempting to load mod materials.");

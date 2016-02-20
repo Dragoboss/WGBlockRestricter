@@ -16,12 +16,17 @@
  */
 package com.mewin.WGBlockRestricter;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -139,7 +144,7 @@ public final class Utils{
 	}
 
 	public static boolean breakAllowedInRegion(ProtectedRegion region, Material blockType){
-		if(region == null){ return false; }
+		if(region == null) return true;// No region allow them.
 		HashSet<Material> allowedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.ALLOWED_BREAK_FLAG);
 		HashSet<Material> blockedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.BLOCKED_BREAK_FLAG);
 		boolean good = blockAllowedInRegion(region, blockType);
@@ -149,11 +154,14 @@ public final class Utils{
 		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
 			good = true;
 		}
+		if(allowedBlocks == null && blockedBlocks == null){// If nothing has been set allow it.
+			good = true;
+		}
 		return good;
 	}
 
 	public static boolean placeAllowedInRegion(ProtectedRegion region, Material blockType){
-		if(region == null){ return false; }
+		if(region == null) return true;// No region allow them.
 		HashSet<Material> allowedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.ALLOWED_PLACE_FLAG);
 		HashSet<Material> blockedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.BLOCKED_PLACE_FLAG);
 		boolean good = blockAllowedInRegion(region, blockType);
@@ -161,6 +169,9 @@ public final class Utils{
 			good = false;
 		}
 		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
+			good = true;
+		}
+		if(allowedBlocks == null && blockedBlocks == null){// If nothing has been set allow it.
 			good = true;
 		}
 		return good;

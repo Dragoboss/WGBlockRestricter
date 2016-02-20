@@ -33,12 +33,12 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 public class WGBlockRestricterPlugin extends JavaPlugin{
 
 	public static final BlockMaterialFlag BLOCK_TYPE_FLAG = new BlockMaterialFlag("block-type");
-	public static final CustomSetFlag ALLOWED_BLOCK_FLAG = new CustomSetFlag("allowed-blocks", BLOCK_TYPE_FLAG);
-	public static final CustomSetFlag BLOCKED_BLOCK_FLAG = new CustomSetFlag("blocked-blocks", BLOCK_TYPE_FLAG);
-	public static final CustomSetFlag ALLOWED_PLACE_FLAG = new CustomSetFlag("allowed-place", BLOCK_TYPE_FLAG);
-	public static final CustomSetFlag BLOCKED_PLACE_FLAG = new CustomSetFlag("blocked-place", BLOCK_TYPE_FLAG);
-	public static final CustomSetFlag ALLOWED_BREAK_FLAG = new CustomSetFlag("allowed-break", BLOCK_TYPE_FLAG);
-	public static final CustomSetFlag BLOCKED_BREAK_FLAG = new CustomSetFlag("blocked-break", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> ALLOWED_BLOCK_FLAG = new CustomSetFlag<>("allowed-blocks", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> BLOCKED_BLOCK_FLAG = new CustomSetFlag<>("blocked-blocks", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> ALLOWED_PLACE_FLAG = new CustomSetFlag<>("allowed-place", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> BLOCKED_PLACE_FLAG = new CustomSetFlag<>("blocked-place", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> ALLOWED_BREAK_FLAG = new CustomSetFlag<>("allowed-break", BLOCK_TYPE_FLAG);
+	public static final CustomSetFlag<?> BLOCKED_BREAK_FLAG = new CustomSetFlag<>("blocked-break", BLOCK_TYPE_FLAG);
 	private BlockListener listener;
 	private WorldGuardPlugin wgPlugin;
 	private WGCustomFlagsPlugin custPlugin;

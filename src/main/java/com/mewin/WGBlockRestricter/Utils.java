@@ -43,7 +43,7 @@ public final class Utils{
 	public static final HashMap<String, Material> aliases = new HashMap<String, Material>(); // used for remapping names and allowing specific non-block-materials
 
 	public static boolean blockAllowedInRegion(ProtectedRegion region, Material blockType){
-		if(region == null){ return false; }
+		if(region == null) return true;
 		HashSet<Material> allowedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.ALLOWED_BLOCK_FLAG);
 		HashSet<Material> blockedBlocks = (HashSet<Material>) region.getFlag(WGBlockRestricterPlugin.BLOCKED_BLOCK_FLAG);
 		boolean good = false;
@@ -51,6 +51,9 @@ public final class Utils{
 			good = false;
 		}
 		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
+			good = true;
+		}
+		if(allowedBlocks == null && blockedBlocks == null){
 			good = true;
 		}
 		return good;

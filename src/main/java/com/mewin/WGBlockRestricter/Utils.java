@@ -96,9 +96,10 @@ public final class Utils{
 				return entry.getValue();// Always true
 			}
 			return false;
-		}else{
-			return placeAllowedInRegion(rm.getRegion("__global__"), blockType);
 		}
+		// No regions at location, do global.
+		if(regions.size() == 0) return placeAllowedInRegion(rm.getRegion("__global__"), blockType);
+		else return false;// Had regions at location and obviously failed the checks. Deny them.
 	}
 
 	public static boolean breakAllowedAtLocation(WorldGuardPlugin wgp, Material mat, Location loc){
@@ -141,9 +142,10 @@ public final class Utils{
 				}
 			}
 			return false;
-		}else{
-			return breakAllowedInRegion(rm.getRegion("__global__"), blockType);
 		}
+		// No regions at location, do global.
+		if(regions.size() == 0) return placeAllowedInRegion(rm.getRegion("__global__"), blockType);
+		else return false;// Had regions at location and obviously failed the checks. Deny them.
 	}
 
 	public static boolean breakAllowedInRegion(ProtectedRegion region, Material blockType){
@@ -155,9 +157,6 @@ public final class Utils{
 			good = false;
 		}
 		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
-			good = true;
-		}
-		if(allowedBlocks == null && blockedBlocks == null){// If nothing has been set allow it.
 			good = true;
 		}
 		return good;
@@ -172,9 +171,6 @@ public final class Utils{
 			good = false;
 		}
 		if(allowedBlocks != null && (allowedBlocks.contains(blockType) || allowedBlocks.contains(Material.AIR))){
-			good = true;
-		}
-		if(allowedBlocks == null && blockedBlocks == null){// If nothing has been set allow it.
 			good = true;
 		}
 		return good;
